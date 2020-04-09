@@ -5,10 +5,6 @@ class Comment extends React.Component {
     constructor() {
         super();
 
-        let commentsArr = JSON.parse(localStorage.getItem('state'));
-
-        console.log(typeof(commentsArr[1]));
-
         this.state = {
             comments: [],
             newName: '',
@@ -16,13 +12,38 @@ class Comment extends React.Component {
         }      
     }
 
+    componentDidMount() {
+        if(localStorage.getItem('state') !== null) {
+            let comments = localStorage.getItem('state');
+            comments = JSON.parse(comments);
+            let arr = [];
+        
+            comments.map((item) => {
+                arr.push(item);
+            });
+
+            this.setState({comments: arr})
+
+        }
+    }
+
     addComment() {
         let comments = this.state.comments;
-        comments.push({text: this.state.newText, author: this.state.newName, time: new Date});
+        let date = new Date;
+        let localTime = date.toLocaleTimeString();
+        let localDate = date.toLocaleDateString();
 
+        if(this.state.newText === '') {
+            let textArea = document.querySelector('textarea');
+            textArea.style.borderColor = 'red';
+        } else if(this.state.newName === '') {
+            comments.push({text: this.state.newText, author: 'Аноним', date: localDate, time: localTime});
+            this.setState({comments, newName: '', newText: ''});
+        } else {
+            comments.push({text: this.state.newText, author: this.state.newName, date: localDate, time: localTime});
+            this.setState({comments, newName: '', newText: ''});
+        }
         
-
-        this.setState({comments, newName: '', newText: ''});
 
         localStorage.setItem('state', JSON.stringify(this.state.comments));
     }
@@ -50,6 +71,9 @@ class Comment extends React.Component {
             name='author'></input></p>
 
             <p><textarea value={this.state.newText}
+            onClick={(ev) => {
+                ev.target.style = 'border-color: black';
+            }}
             onChange={(ev) => {
                 this.setState({newText: ev.target.value});
             }}></textarea></p>
@@ -62,8 +86,8 @@ class Comment extends React.Component {
             return(
             <div key={i} className='comment'>
                 <p className='name'>{comment.author}</p>
-                <p className='time'>{comment.time.toLocaleTimeString()}</p>
-                <p className='time'>{comment.time.toLocaleDateString()}</p>
+                <p className='time'>{comment.time}</p>
+                <p className='time'>{comment.date}</p>
                 <img className='delete'
                 onClick={() => {
                     this.delete(i);
