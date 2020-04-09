@@ -1,0 +1,33 @@
+.comments {
+    border: solid 1px black;
+    padding: 40px;
+    max-width: 500px;
+}
+
+.comment {
+    border: solid 1px black;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    padding-left: 10px;
+    padding-top: 10px;
+    position: relative;
+}
+
+.name {
+    display: inline;
+    margin-right: 10px;
+}
+
+.time {
+    display: inline;
+    margin-left: 10px;
+}
+
+.delete {
+    max-width: 20px;
+    max-height: 20px;
+    position: absolute;
+    right: 3px;
+    top: 3px;
+    cursor: pointer;
+}
